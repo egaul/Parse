@@ -51,7 +51,7 @@ public class Parse {
         try {
             scan = new Scanner(new File("sourceProgram.txt"));
             while (scan.hasNextLine()) {
-                line = scan.nextLine().trim();// Trims leading and trailing whitespace from each line
+                line = scan.nextLine();// Trims leading and trailing whitespace from each line
                 System.out.println(line);//prints line to terminal
                 myOutput.write(line + "\n");//writes line to output text file
             }
@@ -152,16 +152,9 @@ public class Parse {
                     else
                         nextToken = Token.IDENT;//sets token to IDENT if the lexeme is not a special character or Integer literal
             }
-        }
-        i++;
-
-        if (nextToken == Token.END_KEYWORD) {
-            System.out.println("\nNext token is: " + nextToken);
-            myOutput.write("\nNext token is: " + nextToken + "\n");
-        }
-        else {
             System.out.println("Next token is: " + nextToken);
             myOutput.write("Next token is: " + nextToken + "\n");
+            i++;
         }
     }
 
@@ -180,10 +173,17 @@ public class Parse {
             //Processes the first statement
             if (nextToken == Token.PRINT_KEYWORD || nextToken == Token.IDENT || nextToken == Token.READ_KEYWORD || nextToken == Token.IF_KEYWORD){
                 statement();
+                if (nextToken != Token.SEMICOLON) {
+                    System.out.println("**Error** - missing semicolon");
+                    myOutput.write("**Error** - missing semicolon\n");
+                }
             }
             else if(nextToken != Token.END_KEYWORD) {
-                errors.add("**Error** - missing statement");
+                System.out.println("**Error** - missing statement");
+                myOutput.write("**Error** - missing statement\n");
             }
+            System.out.println();
+            myOutput.write("\n");
         }
     }
     private void statement() throws IOException {
@@ -198,16 +198,12 @@ public class Parse {
             System.out.println("**ERROR** - expected identifier or PRINT_KEYWORD");
             myOutput.write("**ERROR** - expected identifier or PRINT_KEYWORD\n");
         }
-
+        if (nextToken == Token.ELSE_KEYWORD){
+            getToken();
+            statement();
+        }
         System.out.println("Exit <statement>");
         myOutput.write("Exit <statement>\n");
-        System.out.println();
-        myOutput.write("\n");
-
-        if (nextToken != Token.SEMICOLON){
-            System.out.println("**Error** - missing semicolon");
-            myOutput.write("**Error** - missing semicolon\n");
-        }
     }
     /*******output method*******/
     // used for printing
@@ -224,6 +220,9 @@ public class Parse {
         else {
             System.out.println("**ERROR** - left-parenthesis\n");
             myOutput.write("**ERROR** - left-parenthesis\n");
+        }
+        if (nextToken == Token.RIGHT_PAREN){
+            getToken();
         }
         System.out.println("Exit <output>");
         myOutput.write("Exit <output>\n");
@@ -283,6 +282,8 @@ public class Parse {
         System.out.println("Enter <selection>");
         myOutput.write("Enter <selection>\n");
 
+        getToken();
+
         if(nextToken == Token.LEFT_PAREN){//checks to see if the next token was a left-parenthses
             expr();
         }
@@ -299,7 +300,6 @@ public class Parse {
             System.out.println("**Error** - missing then keyword");
             myOutput.write("**Error** - missing then keyword\n");
         }
-
         if (nextToken == Token.ELSE_KEYWORD) {
             getToken();
             statement();
@@ -354,8 +354,10 @@ public class Parse {
             if (nextToken == Token.LEFT_PAREN) {
                 getToken();
                 expr();
-                if(nextToken == Token.RIGHT_PAREN)//ADDED in accordance to the ch 4 ver 6 slide 23
+                if(nextToken == Token.RIGHT_PAREN) {
                     getToken();
+                }
+
                 else{
                     System.out.println("**ERROR** - expected right-parenthesis");
                     myOutput.write("**ERROR** - expected right-parenthesis\n");
@@ -368,9 +370,5 @@ public class Parse {
         }//end else
         System.out.println("Exit <factor>");
         myOutput.write("Exit <factor>\n");
-    }
-    private void printToken() throws IOException {
-        System.out.println("Next token is: "+nextToken);
-        myOutput.write("Next token is: "+nextToken+"\n");
     }
 }

@@ -3,7 +3,7 @@ Eliana Gaul, CSCI4200, Fall 2023, Parser
 PROGRAM
 read(count);
 total = 205;
-Area = (length+width) * 20
+ Area = (length+width) * 20
 C = age - 15 * (D / 8);
 print(C+Area);
 if (C) then C = 99;
@@ -64,14 +64,13 @@ Next token is: MULT_OP
 Exit <factor>
 Next token is: INT_LIT
 Enter <factor>
-Next token is: INT_LIT
 Exit <factor>
 Exit <term>
 Exit <expr>
 Exit <assign>
 Exit <statement>
-
 **Error** - missing semicolon
+
 Next token is: IDENT
 Enter <statement>
 Enter <assign>
@@ -127,30 +126,103 @@ Next token is: RIGHT_PAREN
 Exit <factor>
 Exit <term>
 Exit <expr>
+Next token is: SEMICOLON
 Exit <output>
 Exit <statement>
 
-**Error** - missing semicolon
 Next token is: IF_KEYWORD
 Enter <statement>
 Enter <selection>
-**Error** - missing left-parentheses
-**Error** - missing then keyword
+Next token is: LEFT_PAREN
+Enter <expr>
+Enter <term>
+Enter <factor>
+Next token is: IDENT
+Enter <expr>
+Enter <term>
+Enter <factor>
+Next token is: RIGHT_PAREN
+Exit <factor>
+Exit <term>
+Exit <expr>
+Next token is: THEN_KEYWORD
+Exit <factor>
+Exit <term>
+Exit <expr>
+Next token is: IDENT
+Enter <statement>
+Enter <assign>
+Next token is: ASSIGN_OP
+Next token is: INT_LIT
+Enter <expr>
+Enter <term>
+Enter <factor>
+Next token is: SEMICOLON
+Exit <factor>
+Exit <term>
+Exit <expr>
+Exit <assign>
+Exit <statement>
 Exit <selection>
 Exit <statement>
 
-**Error** - missing semicolon
 Next token is: IF_KEYWORD
 Enter <statement>
 Enter <selection>
-**Error** - missing left-parentheses
-**Error** - missing then keyword
+Next token is: LEFT_PAREN
+Enter <expr>
+Enter <term>
+Enter <factor>
+Next token is: IDENT
+Enter <expr>
+Enter <term>
+Enter <factor>
+Next token is: RIGHT_PAREN
+Exit <factor>
+Exit <term>
+Exit <expr>
+Next token is: THEN_KEYWORD
+Exit <factor>
+Exit <term>
+Exit <expr>
+Next token is: IDENT
+Enter <statement>
+Enter <assign>
+Next token is: ASSIGN_OP
+Next token is: IDENT
+Enter <expr>
+Enter <term>
+Enter <factor>
+Next token is: DIV_OP
+Exit <factor>
+Next token is: IDENT
+Enter <factor>
+Next token is: ELSE_KEYWORD
+Exit <factor>
+Exit <term>
+Exit <expr>
+Exit <assign>
+Next token is: PRINT_KEYWORD
+Enter <statement>
+Enter <output>
+Next token is: LEFT_PAREN
+Next token is: IDENT
+Enter <expr>
+Enter <term>
+Enter <factor>
+Next token is: RIGHT_PAREN
+Exit <factor>
+Exit <term>
+Exit <expr>
+Exit <output>
+Exit <statement>
+Exit <statement>
 Exit <selection>
 Exit <statement>
-
 **Error** - missing semicolon
 
 Next token is: END_KEYWORD
+
 Exit <program>
 Parsing of the program is complete!
 ********************************************************************************
