@@ -83,7 +83,7 @@ public class Parse {
         myOutput.close();
     }
 
-    private void getLexemes(String uglyLine) {
+    private void getLexemes(String uglyLine) {//modifies string line then splits it into string array of lexemes
         //Multiple String.replace method calls adds spaces to special operators
         String prettyLine = uglyLine.replace("=", " = ")
                 .replace("(", " ( ")
@@ -96,7 +96,8 @@ public class Parse {
         //Splits the modified line by one or more spaces
         lexemeList = prettyLine.split("\\s+");
     }
-    private void getToken() throws IOException {
+    private void getToken() throws IOException {//getToken is part of the implementation of my Lexical analyzer.
+        //The method tokenizes one lexeme at a time and assigns nextToken the result.
 
         if (i != lexemeList.length) {
 
@@ -152,9 +153,17 @@ public class Parse {
                     else
                         nextToken = Token.IDENT;//sets token to IDENT if the lexeme is not a special character or Integer literal
             }
-            System.out.println("Next token is: " + nextToken);
-            myOutput.write("Next token is: " + nextToken + "\n");
-            i++;
+
+            if (nextToken == Token.END_KEYWORD){
+                System.out.print("Next token is: " + nextToken);
+                myOutput.write("Next token is: " + nextToken);
+            }
+            else {
+                System.out.println("Next token is: " + nextToken);
+                myOutput.write("Next token is: " + nextToken + "\n");
+            }
+
+            i++;//increments counter for lexemes
         }
     }
 
@@ -162,13 +171,14 @@ public class Parse {
         System.out.println("Enter <program>");
         myOutput.write("Enter <program>\n");
 
-        while (scan.hasNextLine()) {
-            i = 0;
+        while (scan.hasNextLine()) {//iterates through each line in input text file
+            i = 0;//after every loop index is re-initialized to 0
+
             // Begins iterating through lines and trim to get rid of white spaces
             String line = scan.nextLine().trim();
 
-            getLexemes(line);
-            getToken();
+            getLexemes(line);//sets lexeme array
+            getToken();//get prints first token
 
             //Processes the first statement
             if (nextToken == Token.PRINT_KEYWORD || nextToken == Token.IDENT || nextToken == Token.READ_KEYWORD || nextToken == Token.IF_KEYWORD){
@@ -178,15 +188,12 @@ public class Parse {
                     myOutput.write("**Error** - missing semicolon\n");
                 }
             }
-            else if(nextToken != Token.END_KEYWORD) {
-                System.out.println("**Error** - missing statement");
-                myOutput.write("**Error** - missing statement\n");
-            }
+            //Splits initial statement for human comprehension
             System.out.println();
             myOutput.write("\n");
         }
     }
-    private void statement() throws IOException {
+    private void statement() throws IOException {//statement method
         System.out.println("Enter <statement>");
         myOutput.write("Enter <statement>\n");
 
@@ -194,13 +201,13 @@ public class Parse {
         else if (nextToken == Token.IDENT) assign();
         else if (nextToken == Token.READ_KEYWORD) input();
         else if (nextToken == Token.IF_KEYWORD) selection();
-        else if (nextToken != Token.END_KEYWORD){
-            System.out.println("**ERROR** - expected identifier or PRINT_KEYWORD");
-            myOutput.write("**ERROR** - expected identifier or PRINT_KEYWORD\n");
-        }
-        if (nextToken == Token.ELSE_KEYWORD){
+        else if(nextToken == Token.THEN_KEYWORD || nextToken == Token.ELSE_KEYWORD){
             getToken();
             statement();
+        }
+        else if (nextToken != Token.END_KEYWORD){
+            System.out.print("**ERROR** - expected identifier or PRINT_KEYWORD");
+            myOutput.write("**ERROR** - expected identifier or PRINT_KEYWORD");
         }
         System.out.println("Exit <statement>");
         myOutput.write("Exit <statement>\n");
@@ -231,7 +238,7 @@ public class Parse {
     private void assign() throws IOException {
         System.out.println("Enter <assign>");
         myOutput.write("Enter <assign>\n");
-        //checks to make sure next token is ident and calls lex
+        
         getToken();
         // checks to make sure equals sign is there and then calls lex and expr method
         if (nextToken == Token.ASSIGN_OP) {
@@ -291,9 +298,7 @@ public class Parse {
             System.out.println("**Error** - missing left-parentheses");
             myOutput.write("**Error** - missing left-parentheses\n");
         }
-
         if(nextToken == Token.THEN_KEYWORD){//checks to see if the then keyword has been found (processed)
-            getToken();//grabs the next token in the statement
             statement();
         }
         else{
@@ -301,7 +306,6 @@ public class Parse {
             myOutput.write("**Error** - missing then keyword\n");
         }
         if (nextToken == Token.ELSE_KEYWORD) {
-            getToken();
             statement();
         }
         System.out.println("Exit <selection>");
@@ -349,25 +353,21 @@ public class Parse {
         if (nextToken == Token.IDENT || nextToken == Token.INT_LIT || nextToken == Token.IF_KEYWORD) {
             getToken();
         }
-        else {
-            // Used to check for calling of expression and lex is called twice for left and right parentheses
-            if (nextToken == Token.LEFT_PAREN) {
+        else if(nextToken == Token.LEFT_PAREN){// Used to check for calling of expression and lex is called twice for left and right parentheses
+            getToken();
+            expr();
+            if(nextToken == Token.RIGHT_PAREN) {
                 getToken();
-                expr();
-                if(nextToken == Token.RIGHT_PAREN) {
-                    getToken();
-                }
-
-                else{
-                    System.out.println("**ERROR** - expected right-parenthesis");
-                    myOutput.write("**ERROR** - expected right-parenthesis\n");
-                }
-            }//end if
-            else {
-                System.out.println("**ERROR** - expected identifier, integer or left-parenthesis");
-                myOutput.write("**ERROR** - expected identifier, integer or left-parenthesis\n");
             }
-        }//end else
+            else{
+                System.out.println("**ERROR** - expected right-parenthesis");
+                myOutput.write("**ERROR** - expected right-parenthesis\n");
+            }
+        }//end if
+        else {
+            System.out.println("**ERROR** - expected identifier, integer or left-parenthesis");
+            myOutput.write("**ERROR** - expected identifier, integer or left-parenthesis\n");
+        }
         System.out.println("Exit <factor>");
         myOutput.write("Exit <factor>\n");
     }

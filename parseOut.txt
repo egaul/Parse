@@ -1,13 +1,13 @@
 Eliana Gaul, CSCI4200, Fall 2023, Parser
 ********************************************************************************
 PROGRAM
-read(count);
-total = 205;
- Area = (length+width) * 20
-C = age - 15 * (D / 8);
-print(C+Area);
-if (C) then C = 99;
-if (count) then average = total/count else print(count)
+    read(count);
+    total = 205;
+        Area = (length+width) * 20
+    C  =    age - 15 * (D / 8);
+    print(C+Area);
+    if (C) then C = 99;
+    if (count) then average = total/count else print(count)
 END
 ********************
 
@@ -149,6 +149,7 @@ Next token is: THEN_KEYWORD
 Exit <factor>
 Exit <term>
 Exit <expr>
+Enter <statement>
 Next token is: IDENT
 Enter <statement>
 Enter <assign>
@@ -162,6 +163,7 @@ Exit <factor>
 Exit <term>
 Exit <expr>
 Exit <assign>
+Exit <statement>
 Exit <statement>
 Exit <selection>
 Exit <statement>
@@ -185,6 +187,7 @@ Next token is: THEN_KEYWORD
 Exit <factor>
 Exit <term>
 Exit <expr>
+Enter <statement>
 Next token is: IDENT
 Enter <statement>
 Enter <assign>
@@ -202,6 +205,9 @@ Exit <factor>
 Exit <term>
 Exit <expr>
 Exit <assign>
+Exit <statement>
+Exit <statement>
+Enter <statement>
 Next token is: PRINT_KEYWORD
 Enter <statement>
 Enter <output>
@@ -222,7 +228,6 @@ Exit <statement>
 **Error** - missing semicolon
 
 Next token is: END_KEYWORD
-
 Exit <program>
 Parsing of the program is complete!
 ********************************************************************************
