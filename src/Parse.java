@@ -2,19 +2,18 @@
  * Name: Eliana Gaul
  * Class: CSCI 4200, Fall 2023
  * Program: Parser
- * Yes, I did use my own Lexical Analyzer
+ * Yes, I did use my own Lexical Analyzer.
+ * I tweaked my lexical analyzer to return one token at a time instead of a token array
  */
 import java.util.*;
 import java.io.*;
 public class Parse {
     private static FileWriter myOutput;
-    private static ArrayList<String> errors;
-    private static String[] lexemeList;
+    private static String[] lexemeList;//store string array of lexemes
     private static Scanner scan;
     private static String line;
     private static Token nextToken;
-
-    private static int i = 0;
+    private static int i = 0;//keeps track of current index in lexeme array
 
     enum Token {
         ADD_OP,
@@ -238,7 +237,7 @@ public class Parse {
     private void assign() throws IOException {
         System.out.println("Enter <assign>");
         myOutput.write("Enter <assign>\n");
-        
+
         getToken();
         // checks to make sure equals sign is there and then calls lex and expr method
         if (nextToken == Token.ASSIGN_OP) {
